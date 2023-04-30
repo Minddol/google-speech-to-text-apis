@@ -30,11 +30,6 @@ let package = Package(
             dependencies: [
                 .product(name: "SwiftProtobuf", package: "swift-protobuf")
             ],
-            path: "google",
-            sources: [
-                "**/*.pbobjc.h",
-                "**/*.pbobjc.m"
-            ],
             publicHeadersPath: ".",
             cSettings: [
                 .headerSearchPath("../"),
@@ -46,11 +41,6 @@ let package = Package(
             dependencies: [
                 .product(name: "GRPC", package: "grpc-swift"),
                 .target(name: "Messages")
-            ],
-            path: "google",
-            sources: [
-                "**/*.pbrpc.h",
-                "**/*.pbrpc.m"
             ],
             publicHeadersPath: ".",
             cSettings: [
