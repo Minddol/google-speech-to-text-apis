@@ -5,8 +5,8 @@ import PackageDescription
 let package = Package(
     name: "googleapis",
     platforms: [
-        .iOS(.v7_1),
-        .macOS(.v10_9)
+        .iOS(.v9),
+        .macOS(.v10_10)
     ],
     products: [
         .library(
