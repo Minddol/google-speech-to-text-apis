@@ -11,7 +11,7 @@ let package = Package(
     products: [
         .library(
             name: "SwiftGoogleApis",
-            targets: ["Messages", "Services"]
+            targets: ["SwiftGoogleApis"]
         )
     ],
     dependencies: [
@@ -26,17 +26,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Messages",
+            name: "SwiftGoogleApis",
             dependencies: [
                 .product(name: "GRPC", package: "grpc-swift"),
                 .product(name: "SwiftProtobuf", package: "swift-protobuf")
-            ]
-        ),
-        .target(
-            name: "Services",
-            dependencies: [
-                .product(name: "GRPC", package: "grpc-swift"),
-                .target(name: "Messages")
             ]
         )
     ]

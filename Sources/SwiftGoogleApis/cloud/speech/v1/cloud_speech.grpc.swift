@@ -24,7 +24,6 @@ import GRPC
 import NIO
 import NIOConcurrencyHelpers
 import SwiftProtobuf
-import Messages
 
 
 /// Service that implements Google Cloud Speech API.
