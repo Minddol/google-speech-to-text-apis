@@ -3,14 +3,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "googleapis",
+    name: "SwiftGoogleApis",
     platforms: [
         .iOS(.v9),
         .macOS(.v10_10)
     ],
     products: [
         .library(
-            name: "googleapis",
+            name: "SwiftGoogleApis",
             targets: ["Messages", "Services"]
         )
     ],
@@ -30,11 +30,6 @@ let package = Package(
             dependencies: [
                 .product(name: "GRPC", package: "grpc-swift"),
                 .product(name: "SwiftProtobuf", package: "swift-protobuf")
-            ],
-            publicHeadersPath: ".",
-            cSettings: [
-                .headerSearchPath("../"),
-                .unsafeFlags(["-fno-objc-arc"])
             ]
         ),
         .target(
@@ -42,14 +37,8 @@ let package = Package(
             dependencies: [
                 .product(name: "GRPC", package: "grpc-swift"),
                 .target(name: "Messages")
-            ],
-            publicHeadersPath: ".",
-            cSettings: [
-                .headerSearchPath("../"),
-                .unsafeFlags(["-fobjc-arc"])
             ]
         )
-    ],
-    cxxLanguageStandard: .cxx14
+    ]
 )
 
