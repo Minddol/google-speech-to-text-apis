@@ -28,6 +28,7 @@ let package = Package(
         .target(
             name: "Messages",
             dependencies: [
+                .product(name: "GRPC", package: "grpc-swift"),
                 .product(name: "SwiftProtobuf", package: "swift-protobuf")
             ],
             publicHeadersPath: ".",

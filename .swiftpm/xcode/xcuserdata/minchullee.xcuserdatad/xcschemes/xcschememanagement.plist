@@ -17,7 +17,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>Messages</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>Services</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>google-speech-to-text-apis</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>googleapis</key>
 		<dict>
 			<key>primary</key>
 			<true/>
