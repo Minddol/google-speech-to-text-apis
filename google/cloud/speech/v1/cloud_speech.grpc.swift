@@ -29,7 +29,7 @@ import SwiftProtobuf
 /// Service that implements Google Cloud Speech API.
 ///
 /// Usage: instantiate `Google_Cloud_Speech_V1_SpeechClient`, then call methods of this protocol to make API calls.
-internal protocol Google_Cloud_Speech_V1_SpeechClientProtocol: GRPCClient {
+public protocol Google_Cloud_Speech_V1_SpeechClientProtocol: GRPCClient {
   var serviceName: String { get }
   var interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol? { get }
 
@@ -50,7 +50,7 @@ internal protocol Google_Cloud_Speech_V1_SpeechClientProtocol: GRPCClient {
 }
 
 extension Google_Cloud_Speech_V1_SpeechClientProtocol {
-  internal var serviceName: String {
+  public var serviceName: String {
     return "google.cloud.speech.v1.Speech"
   }
 
@@ -61,7 +61,7 @@ extension Google_Cloud_Speech_V1_SpeechClientProtocol {
   ///   - request: Request to send to Recognize.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func recognize(
+  public func recognize(
     _ request: Google_Cloud_Speech_V1_RecognizeRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Google_Cloud_Speech_V1_RecognizeRequest, Google_Cloud_Speech_V1_RecognizeResponse> {
@@ -82,7 +82,7 @@ extension Google_Cloud_Speech_V1_SpeechClientProtocol {
   ///   - request: Request to send to LongRunningRecognize.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func longRunningRecognize(
+  public func longRunningRecognize(
     _ request: Google_Cloud_Speech_V1_LongRunningRecognizeRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Google_Cloud_Speech_V1_LongRunningRecognizeRequest, Google_Longrunning_Operation> {
@@ -104,7 +104,7 @@ extension Google_Cloud_Speech_V1_SpeechClientProtocol {
   ///   - callOptions: Call options.
   ///   - handler: A closure called when each response is received from the server.
   /// - Returns: A `ClientStreamingCall` with futures for the metadata and status.
-  internal func streamingRecognize(
+  public func streamingRecognize(
     callOptions: CallOptions? = nil,
     handler: @escaping (Google_Cloud_Speech_V1_StreamingRecognizeResponse) -> Void
   ) -> BidirectionalStreamingCall<Google_Cloud_Speech_V1_StreamingRecognizeRequest, Google_Cloud_Speech_V1_StreamingRecognizeResponse> {
@@ -123,16 +123,16 @@ extension Google_Cloud_Speech_V1_SpeechClient: @unchecked Sendable {}
 #endif // compiler(>=5.6)
 
 @available(*, deprecated, renamed: "Google_Cloud_Speech_V1_SpeechNIOClient")
-internal final class Google_Cloud_Speech_V1_SpeechClient: Google_Cloud_Speech_V1_SpeechClientProtocol {
+public final class Google_Cloud_Speech_V1_SpeechClient: Google_Cloud_Speech_V1_SpeechClientProtocol {
   private let lock = Lock()
   private var _defaultCallOptions: CallOptions
   private var _interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol?
-  internal let channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions {
+  public let channel: GRPCChannel
+  public var defaultCallOptions: CallOptions {
     get { self.lock.withLock { return self._defaultCallOptions } }
     set { self.lock.withLockVoid { self._defaultCallOptions = newValue } }
   }
-  internal var interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol? {
+  public var interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol? {
     get { self.lock.withLock { return self._interceptors } }
     set { self.lock.withLockVoid { self._interceptors = newValue } }
   }
@@ -143,7 +143,7 @@ internal final class Google_Cloud_Speech_V1_SpeechClient: Google_Cloud_Speech_V1
   ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
   ///   - interceptors: A factory providing interceptors for each RPC.
-  internal init(
+  public init(
     channel: GRPCChannel,
     defaultCallOptions: CallOptions = CallOptions(),
     interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol? = nil
@@ -154,10 +154,10 @@ internal final class Google_Cloud_Speech_V1_SpeechClient: Google_Cloud_Speech_V1
   }
 }
 
-internal struct Google_Cloud_Speech_V1_SpeechNIOClient: Google_Cloud_Speech_V1_SpeechClientProtocol {
-  internal var channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions
-  internal var interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol?
+public struct Google_Cloud_Speech_V1_SpeechNIOClient: Google_Cloud_Speech_V1_SpeechClientProtocol {
+  public var channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol?
 
   /// Creates a client for the google.cloud.speech.v1.Speech service.
   ///
@@ -165,7 +165,7 @@ internal struct Google_Cloud_Speech_V1_SpeechNIOClient: Google_Cloud_Speech_V1_S
   ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
   ///   - interceptors: A factory providing interceptors for each RPC.
-  internal init(
+  public init(
     channel: GRPCChannel,
     defaultCallOptions: CallOptions = CallOptions(),
     interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol? = nil
@@ -179,7 +179,7 @@ internal struct Google_Cloud_Speech_V1_SpeechNIOClient: Google_Cloud_Speech_V1_S
 #if compiler(>=5.6)
 /// Service that implements Google Cloud Speech API.
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-internal protocol Google_Cloud_Speech_V1_SpeechAsyncClientProtocol: GRPCClient {
+public protocol Google_Cloud_Speech_V1_SpeechAsyncClientProtocol: GRPCClient {
   static var serviceDescriptor: GRPCServiceDescriptor { get }
   var interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol? { get }
 
@@ -200,15 +200,15 @@ internal protocol Google_Cloud_Speech_V1_SpeechAsyncClientProtocol: GRPCClient {
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension Google_Cloud_Speech_V1_SpeechAsyncClientProtocol {
-  internal static var serviceDescriptor: GRPCServiceDescriptor {
+  public static var serviceDescriptor: GRPCServiceDescriptor {
     return Google_Cloud_Speech_V1_SpeechClientMetadata.serviceDescriptor
   }
 
-  internal var interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol? {
+  public var interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol? {
     return nil
   }
 
-  internal func makeRecognizeCall(
+  public func makeRecognizeCall(
     _ request: Google_Cloud_Speech_V1_RecognizeRequest,
     callOptions: CallOptions? = nil
   ) -> GRPCAsyncUnaryCall<Google_Cloud_Speech_V1_RecognizeRequest, Google_Cloud_Speech_V1_RecognizeResponse> {
@@ -220,7 +220,7 @@ extension Google_Cloud_Speech_V1_SpeechAsyncClientProtocol {
     )
   }
 
-  internal func makeLongRunningRecognizeCall(
+  public func makeLongRunningRecognizeCall(
     _ request: Google_Cloud_Speech_V1_LongRunningRecognizeRequest,
     callOptions: CallOptions? = nil
   ) -> GRPCAsyncUnaryCall<Google_Cloud_Speech_V1_LongRunningRecognizeRequest, Google_Longrunning_Operation> {
@@ -232,7 +232,7 @@ extension Google_Cloud_Speech_V1_SpeechAsyncClientProtocol {
     )
   }
 
-  internal func makeStreamingRecognizeCall(
+  public func makeStreamingRecognizeCall(
     callOptions: CallOptions? = nil
   ) -> GRPCAsyncBidirectionalStreamingCall<Google_Cloud_Speech_V1_StreamingRecognizeRequest, Google_Cloud_Speech_V1_StreamingRecognizeResponse> {
     return self.makeAsyncBidirectionalStreamingCall(
@@ -245,7 +245,7 @@ extension Google_Cloud_Speech_V1_SpeechAsyncClientProtocol {
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension Google_Cloud_Speech_V1_SpeechAsyncClientProtocol {
-  internal func recognize(
+  public func recognize(
     _ request: Google_Cloud_Speech_V1_RecognizeRequest,
     callOptions: CallOptions? = nil
   ) async throws -> Google_Cloud_Speech_V1_RecognizeResponse {
@@ -257,7 +257,7 @@ extension Google_Cloud_Speech_V1_SpeechAsyncClientProtocol {
     )
   }
 
-  internal func longRunningRecognize(
+  public func longRunningRecognize(
     _ request: Google_Cloud_Speech_V1_LongRunningRecognizeRequest,
     callOptions: CallOptions? = nil
   ) async throws -> Google_Longrunning_Operation {
@@ -269,7 +269,7 @@ extension Google_Cloud_Speech_V1_SpeechAsyncClientProtocol {
     )
   }
 
-  internal func streamingRecognize<RequestStream>(
+  public func streamingRecognize<RequestStream>(
     _ requests: RequestStream,
     callOptions: CallOptions? = nil
   ) -> GRPCAsyncResponseStream<Google_Cloud_Speech_V1_StreamingRecognizeResponse> where RequestStream: Sequence, RequestStream.Element == Google_Cloud_Speech_V1_StreamingRecognizeRequest {
@@ -281,7 +281,7 @@ extension Google_Cloud_Speech_V1_SpeechAsyncClientProtocol {
     )
   }
 
-  internal func streamingRecognize<RequestStream>(
+  public func streamingRecognize<RequestStream>(
     _ requests: RequestStream,
     callOptions: CallOptions? = nil
   ) -> GRPCAsyncResponseStream<Google_Cloud_Speech_V1_StreamingRecognizeResponse> where RequestStream: AsyncSequence & Sendable, RequestStream.Element == Google_Cloud_Speech_V1_StreamingRecognizeRequest {
@@ -295,12 +295,12 @@ extension Google_Cloud_Speech_V1_SpeechAsyncClientProtocol {
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-internal struct Google_Cloud_Speech_V1_SpeechAsyncClient: Google_Cloud_Speech_V1_SpeechAsyncClientProtocol {
-  internal var channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions
-  internal var interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol?
+public struct Google_Cloud_Speech_V1_SpeechAsyncClient: Google_Cloud_Speech_V1_SpeechAsyncClientProtocol {
+  public var channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol?
 
-  internal init(
+  public init(
     channel: GRPCChannel,
     defaultCallOptions: CallOptions = CallOptions(),
     interceptors: Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol? = nil
@@ -313,7 +313,7 @@ internal struct Google_Cloud_Speech_V1_SpeechAsyncClient: Google_Cloud_Speech_V1
 
 #endif // compiler(>=5.6)
 
-internal protocol Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol: GRPCSendable {
+public protocol Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol: GRPCSendable {
 
   /// - Returns: Interceptors to use when invoking 'recognize'.
   func makeRecognizeInterceptors() -> [ClientInterceptor<Google_Cloud_Speech_V1_RecognizeRequest, Google_Cloud_Speech_V1_RecognizeResponse>]
@@ -325,8 +325,8 @@ internal protocol Google_Cloud_Speech_V1_SpeechClientInterceptorFactoryProtocol:
   func makeStreamingRecognizeInterceptors() -> [ClientInterceptor<Google_Cloud_Speech_V1_StreamingRecognizeRequest, Google_Cloud_Speech_V1_StreamingRecognizeResponse>]
 }
 
-internal enum Google_Cloud_Speech_V1_SpeechClientMetadata {
-  internal static let serviceDescriptor = GRPCServiceDescriptor(
+public enum Google_Cloud_Speech_V1_SpeechClientMetadata {
+  public static let serviceDescriptor = GRPCServiceDescriptor(
     name: "Speech",
     fullName: "google.cloud.speech.v1.Speech",
     methods: [
@@ -336,20 +336,20 @@ internal enum Google_Cloud_Speech_V1_SpeechClientMetadata {
     ]
   )
 
-  internal enum Methods {
-    internal static let recognize = GRPCMethodDescriptor(
+  public enum Methods {
+    public static let recognize = GRPCMethodDescriptor(
       name: "Recognize",
       path: "/google.cloud.speech.v1.Speech/Recognize",
       type: GRPCCallType.unary
     )
 
-    internal static let longRunningRecognize = GRPCMethodDescriptor(
+    public static let longRunningRecognize = GRPCMethodDescriptor(
       name: "LongRunningRecognize",
       path: "/google.cloud.speech.v1.Speech/LongRunningRecognize",
       type: GRPCCallType.unary
     )
 
-    internal static let streamingRecognize = GRPCMethodDescriptor(
+    public static let streamingRecognize = GRPCMethodDescriptor(
       name: "StreamingRecognize",
       path: "/google.cloud.speech.v1.Speech/StreamingRecognize",
       type: GRPCCallType.bidirectionalStreaming
@@ -360,7 +360,7 @@ internal enum Google_Cloud_Speech_V1_SpeechClientMetadata {
 /// Service that implements Google Cloud Speech API.
 ///
 /// To build a server, implement a class that conforms to this protocol.
-internal protocol Google_Cloud_Speech_V1_SpeechProvider: CallHandlerProvider {
+public protocol Google_Cloud_Speech_V1_SpeechProvider: CallHandlerProvider {
   var interceptors: Google_Cloud_Speech_V1_SpeechServerInterceptorFactoryProtocol? { get }
 
   /// Performs synchronous speech recognition: receive results after all audio
@@ -379,13 +379,13 @@ internal protocol Google_Cloud_Speech_V1_SpeechProvider: CallHandlerProvider {
 }
 
 extension Google_Cloud_Speech_V1_SpeechProvider {
-  internal var serviceName: Substring {
+  public var serviceName: Substring {
     return Google_Cloud_Speech_V1_SpeechServerMetadata.serviceDescriptor.fullName[...]
   }
 
   /// Determines, calls and returns the appropriate request handler, depending on the request's method.
   /// Returns nil for methods not handled by this service.
-  internal func handle(
+  public func handle(
     method name: Substring,
     context: CallHandlerContext
   ) -> GRPCServerHandlerProtocol? {
@@ -429,7 +429,7 @@ extension Google_Cloud_Speech_V1_SpeechProvider {
 ///
 /// To implement a server, implement an object which conforms to this protocol.
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-internal protocol Google_Cloud_Speech_V1_SpeechAsyncProvider: CallHandlerProvider {
+public protocol Google_Cloud_Speech_V1_SpeechAsyncProvider: CallHandlerProvider {
   static var serviceDescriptor: GRPCServiceDescriptor { get }
   var interceptors: Google_Cloud_Speech_V1_SpeechServerInterceptorFactoryProtocol? { get }
 
@@ -460,19 +460,19 @@ internal protocol Google_Cloud_Speech_V1_SpeechAsyncProvider: CallHandlerProvide
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension Google_Cloud_Speech_V1_SpeechAsyncProvider {
-  internal static var serviceDescriptor: GRPCServiceDescriptor {
+  public static var serviceDescriptor: GRPCServiceDescriptor {
     return Google_Cloud_Speech_V1_SpeechServerMetadata.serviceDescriptor
   }
 
-  internal var serviceName: Substring {
+  public var serviceName: Substring {
     return Google_Cloud_Speech_V1_SpeechServerMetadata.serviceDescriptor.fullName[...]
   }
 
-  internal var interceptors: Google_Cloud_Speech_V1_SpeechServerInterceptorFactoryProtocol? {
+  public var interceptors: Google_Cloud_Speech_V1_SpeechServerInterceptorFactoryProtocol? {
     return nil
   }
 
-  internal func handle(
+  public func handle(
     method name: Substring,
     context: CallHandlerContext
   ) -> GRPCServerHandlerProtocol? {
@@ -512,7 +512,7 @@ extension Google_Cloud_Speech_V1_SpeechAsyncProvider {
 
 #endif // compiler(>=5.6)
 
-internal protocol Google_Cloud_Speech_V1_SpeechServerInterceptorFactoryProtocol {
+public protocol Google_Cloud_Speech_V1_SpeechServerInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when handling 'recognize'.
   ///   Defaults to calling `self.makeInterceptors()`.
@@ -527,8 +527,8 @@ internal protocol Google_Cloud_Speech_V1_SpeechServerInterceptorFactoryProtocol 
   func makeStreamingRecognizeInterceptors() -> [ServerInterceptor<Google_Cloud_Speech_V1_StreamingRecognizeRequest, Google_Cloud_Speech_V1_StreamingRecognizeResponse>]
 }
 
-internal enum Google_Cloud_Speech_V1_SpeechServerMetadata {
-  internal static let serviceDescriptor = GRPCServiceDescriptor(
+public enum Google_Cloud_Speech_V1_SpeechServerMetadata {
+  public static let serviceDescriptor = GRPCServiceDescriptor(
     name: "Speech",
     fullName: "google.cloud.speech.v1.Speech",
     methods: [
@@ -538,20 +538,20 @@ internal enum Google_Cloud_Speech_V1_SpeechServerMetadata {
     ]
   )
 
-  internal enum Methods {
-    internal static let recognize = GRPCMethodDescriptor(
+  public enum Methods {
+    public static let recognize = GRPCMethodDescriptor(
       name: "Recognize",
       path: "/google.cloud.speech.v1.Speech/Recognize",
       type: GRPCCallType.unary
     )
 
-    internal static let longRunningRecognize = GRPCMethodDescriptor(
+    public static let longRunningRecognize = GRPCMethodDescriptor(
       name: "LongRunningRecognize",
       path: "/google.cloud.speech.v1.Speech/LongRunningRecognize",
       type: GRPCCallType.unary
     )
 
-    internal static let streamingRecognize = GRPCMethodDescriptor(
+    public static let streamingRecognize = GRPCMethodDescriptor(
       name: "StreamingRecognize",
       path: "/google.cloud.speech.v1.Speech/StreamingRecognize",
       type: GRPCCallType.bidirectionalStreaming

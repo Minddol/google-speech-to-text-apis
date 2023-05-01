@@ -38,7 +38,7 @@ import SwiftProtobuf
 /// developers can have a consistent client experience.
 ///
 /// Usage: instantiate `Google_Longrunning_OperationsClient`, then call methods of this protocol to make API calls.
-internal protocol Google_Longrunning_OperationsClientProtocol: GRPCClient {
+public protocol Google_Longrunning_OperationsClientProtocol: GRPCClient {
   var serviceName: String { get }
   var interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol? { get }
 
@@ -64,7 +64,7 @@ internal protocol Google_Longrunning_OperationsClientProtocol: GRPCClient {
 }
 
 extension Google_Longrunning_OperationsClientProtocol {
-  internal var serviceName: String {
+  public var serviceName: String {
     return "google.longrunning.Operations"
   }
 
@@ -76,7 +76,7 @@ extension Google_Longrunning_OperationsClientProtocol {
   ///   - request: Request to send to GetOperation.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func getOperation(
+  public func getOperation(
     _ request: Google_Longrunning_GetOperationRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Google_Longrunning_GetOperationRequest, Google_Longrunning_Operation> {
@@ -96,7 +96,7 @@ extension Google_Longrunning_OperationsClientProtocol {
   ///   - request: Request to send to ListOperations.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func listOperations(
+  public func listOperations(
     _ request: Google_Longrunning_ListOperationsRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Google_Longrunning_ListOperationsRequest, Google_Longrunning_ListOperationsResponse> {
@@ -119,7 +119,7 @@ extension Google_Longrunning_OperationsClientProtocol {
   ///   - request: Request to send to CancelOperation.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func cancelOperation(
+  public func cancelOperation(
     _ request: Google_Longrunning_CancelOperationRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Google_Longrunning_CancelOperationRequest, SwiftProtobuf.Google_Protobuf_Empty> {
@@ -138,7 +138,7 @@ extension Google_Longrunning_OperationsClientProtocol {
   ///   - request: Request to send to DeleteOperation.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  internal func deleteOperation(
+  public func deleteOperation(
     _ request: Google_Longrunning_DeleteOperationRequest,
     callOptions: CallOptions? = nil
   ) -> UnaryCall<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty> {
@@ -157,16 +157,16 @@ extension Google_Longrunning_OperationsClient: @unchecked Sendable {}
 #endif // compiler(>=5.6)
 
 @available(*, deprecated, renamed: "Google_Longrunning_OperationsNIOClient")
-internal final class Google_Longrunning_OperationsClient: Google_Longrunning_OperationsClientProtocol {
+public final class Google_Longrunning_OperationsClient: Google_Longrunning_OperationsClientProtocol {
   private let lock = Lock()
   private var _defaultCallOptions: CallOptions
   private var _interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol?
-  internal let channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions {
+  public let channel: GRPCChannel
+  public var defaultCallOptions: CallOptions {
     get { self.lock.withLock { return self._defaultCallOptions } }
     set { self.lock.withLockVoid { self._defaultCallOptions = newValue } }
   }
-  internal var interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol? {
+  public var interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol? {
     get { self.lock.withLock { return self._interceptors } }
     set { self.lock.withLockVoid { self._interceptors = newValue } }
   }
@@ -177,7 +177,7 @@ internal final class Google_Longrunning_OperationsClient: Google_Longrunning_Ope
   ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
   ///   - interceptors: A factory providing interceptors for each RPC.
-  internal init(
+  public init(
     channel: GRPCChannel,
     defaultCallOptions: CallOptions = CallOptions(),
     interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol? = nil
@@ -188,10 +188,10 @@ internal final class Google_Longrunning_OperationsClient: Google_Longrunning_Ope
   }
 }
 
-internal struct Google_Longrunning_OperationsNIOClient: Google_Longrunning_OperationsClientProtocol {
-  internal var channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions
-  internal var interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol?
+public struct Google_Longrunning_OperationsNIOClient: Google_Longrunning_OperationsClientProtocol {
+  public var channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol?
 
   /// Creates a client for the google.longrunning.Operations service.
   ///
@@ -199,7 +199,7 @@ internal struct Google_Longrunning_OperationsNIOClient: Google_Longrunning_Opera
   ///   - channel: `GRPCChannel` to the service host.
   ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
   ///   - interceptors: A factory providing interceptors for each RPC.
-  internal init(
+  public init(
     channel: GRPCChannel,
     defaultCallOptions: CallOptions = CallOptions(),
     interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol? = nil
@@ -222,7 +222,7 @@ internal struct Google_Longrunning_OperationsNIOClient: Google_Longrunning_Opera
 /// long-running operations should implement the `Operations` interface so
 /// developers can have a consistent client experience.
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-internal protocol Google_Longrunning_OperationsAsyncClientProtocol: GRPCClient {
+public protocol Google_Longrunning_OperationsAsyncClientProtocol: GRPCClient {
   static var serviceDescriptor: GRPCServiceDescriptor { get }
   var interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol? { get }
 
@@ -249,15 +249,15 @@ internal protocol Google_Longrunning_OperationsAsyncClientProtocol: GRPCClient {
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension Google_Longrunning_OperationsAsyncClientProtocol {
-  internal static var serviceDescriptor: GRPCServiceDescriptor {
+  public static var serviceDescriptor: GRPCServiceDescriptor {
     return Google_Longrunning_OperationsClientMetadata.serviceDescriptor
   }
 
-  internal var interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol? {
+  public var interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol? {
     return nil
   }
 
-  internal func makeGetOperationCall(
+  public func makeGetOperationCall(
     _ request: Google_Longrunning_GetOperationRequest,
     callOptions: CallOptions? = nil
   ) -> GRPCAsyncUnaryCall<Google_Longrunning_GetOperationRequest, Google_Longrunning_Operation> {
@@ -269,7 +269,7 @@ extension Google_Longrunning_OperationsAsyncClientProtocol {
     )
   }
 
-  internal func makeListOperationsCall(
+  public func makeListOperationsCall(
     _ request: Google_Longrunning_ListOperationsRequest,
     callOptions: CallOptions? = nil
   ) -> GRPCAsyncUnaryCall<Google_Longrunning_ListOperationsRequest, Google_Longrunning_ListOperationsResponse> {
@@ -281,7 +281,7 @@ extension Google_Longrunning_OperationsAsyncClientProtocol {
     )
   }
 
-  internal func makeCancelOperationCall(
+  public func makeCancelOperationCall(
     _ request: Google_Longrunning_CancelOperationRequest,
     callOptions: CallOptions? = nil
   ) -> GRPCAsyncUnaryCall<Google_Longrunning_CancelOperationRequest, SwiftProtobuf.Google_Protobuf_Empty> {
@@ -293,7 +293,7 @@ extension Google_Longrunning_OperationsAsyncClientProtocol {
     )
   }
 
-  internal func makeDeleteOperationCall(
+  public func makeDeleteOperationCall(
     _ request: Google_Longrunning_DeleteOperationRequest,
     callOptions: CallOptions? = nil
   ) -> GRPCAsyncUnaryCall<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty> {
@@ -308,7 +308,7 @@ extension Google_Longrunning_OperationsAsyncClientProtocol {
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension Google_Longrunning_OperationsAsyncClientProtocol {
-  internal func getOperation(
+  public func getOperation(
     _ request: Google_Longrunning_GetOperationRequest,
     callOptions: CallOptions? = nil
   ) async throws -> Google_Longrunning_Operation {
@@ -320,7 +320,7 @@ extension Google_Longrunning_OperationsAsyncClientProtocol {
     )
   }
 
-  internal func listOperations(
+  public func listOperations(
     _ request: Google_Longrunning_ListOperationsRequest,
     callOptions: CallOptions? = nil
   ) async throws -> Google_Longrunning_ListOperationsResponse {
@@ -332,7 +332,7 @@ extension Google_Longrunning_OperationsAsyncClientProtocol {
     )
   }
 
-  internal func cancelOperation(
+  public func cancelOperation(
     _ request: Google_Longrunning_CancelOperationRequest,
     callOptions: CallOptions? = nil
   ) async throws -> SwiftProtobuf.Google_Protobuf_Empty {
@@ -344,7 +344,7 @@ extension Google_Longrunning_OperationsAsyncClientProtocol {
     )
   }
 
-  internal func deleteOperation(
+  public func deleteOperation(
     _ request: Google_Longrunning_DeleteOperationRequest,
     callOptions: CallOptions? = nil
   ) async throws -> SwiftProtobuf.Google_Protobuf_Empty {
@@ -358,12 +358,12 @@ extension Google_Longrunning_OperationsAsyncClientProtocol {
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-internal struct Google_Longrunning_OperationsAsyncClient: Google_Longrunning_OperationsAsyncClientProtocol {
-  internal var channel: GRPCChannel
-  internal var defaultCallOptions: CallOptions
-  internal var interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol?
+public struct Google_Longrunning_OperationsAsyncClient: Google_Longrunning_OperationsAsyncClientProtocol {
+  public var channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol?
 
-  internal init(
+  public init(
     channel: GRPCChannel,
     defaultCallOptions: CallOptions = CallOptions(),
     interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol? = nil
@@ -376,7 +376,7 @@ internal struct Google_Longrunning_OperationsAsyncClient: Google_Longrunning_Ope
 
 #endif // compiler(>=5.6)
 
-internal protocol Google_Longrunning_OperationsClientInterceptorFactoryProtocol: GRPCSendable {
+public protocol Google_Longrunning_OperationsClientInterceptorFactoryProtocol: GRPCSendable {
 
   /// - Returns: Interceptors to use when invoking 'getOperation'.
   func makeGetOperationInterceptors() -> [ClientInterceptor<Google_Longrunning_GetOperationRequest, Google_Longrunning_Operation>]
@@ -391,8 +391,8 @@ internal protocol Google_Longrunning_OperationsClientInterceptorFactoryProtocol:
   func makeDeleteOperationInterceptors() -> [ClientInterceptor<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>]
 }
 
-internal enum Google_Longrunning_OperationsClientMetadata {
-  internal static let serviceDescriptor = GRPCServiceDescriptor(
+public enum Google_Longrunning_OperationsClientMetadata {
+  public static let serviceDescriptor = GRPCServiceDescriptor(
     name: "Operations",
     fullName: "google.longrunning.Operations",
     methods: [
@@ -403,26 +403,26 @@ internal enum Google_Longrunning_OperationsClientMetadata {
     ]
   )
 
-  internal enum Methods {
-    internal static let getOperation = GRPCMethodDescriptor(
+  public enum Methods {
+    public static let getOperation = GRPCMethodDescriptor(
       name: "GetOperation",
       path: "/google.longrunning.Operations/GetOperation",
       type: GRPCCallType.unary
     )
 
-    internal static let listOperations = GRPCMethodDescriptor(
+    public static let listOperations = GRPCMethodDescriptor(
       name: "ListOperations",
       path: "/google.longrunning.Operations/ListOperations",
       type: GRPCCallType.unary
     )
 
-    internal static let cancelOperation = GRPCMethodDescriptor(
+    public static let cancelOperation = GRPCMethodDescriptor(
       name: "CancelOperation",
       path: "/google.longrunning.Operations/CancelOperation",
       type: GRPCCallType.unary
     )
 
-    internal static let deleteOperation = GRPCMethodDescriptor(
+    public static let deleteOperation = GRPCMethodDescriptor(
       name: "DeleteOperation",
       path: "/google.longrunning.Operations/DeleteOperation",
       type: GRPCCallType.unary
@@ -442,7 +442,7 @@ internal enum Google_Longrunning_OperationsClientMetadata {
 /// developers can have a consistent client experience.
 ///
 /// To build a server, implement a class that conforms to this protocol.
-internal protocol Google_Longrunning_OperationsProvider: CallHandlerProvider {
+public protocol Google_Longrunning_OperationsProvider: CallHandlerProvider {
   var interceptors: Google_Longrunning_OperationsServerInterceptorFactoryProtocol? { get }
 
   /// Gets the latest state of a long-running operation.  Clients may use this
@@ -469,13 +469,13 @@ internal protocol Google_Longrunning_OperationsProvider: CallHandlerProvider {
 }
 
 extension Google_Longrunning_OperationsProvider {
-  internal var serviceName: Substring {
+  public var serviceName: Substring {
     return Google_Longrunning_OperationsServerMetadata.serviceDescriptor.fullName[...]
   }
 
   /// Determines, calls and returns the appropriate request handler, depending on the request's method.
   /// Returns nil for methods not handled by this service.
-  internal func handle(
+  public func handle(
     method name: Substring,
     context: CallHandlerContext
   ) -> GRPCServerHandlerProtocol? {
@@ -537,7 +537,7 @@ extension Google_Longrunning_OperationsProvider {
 ///
 /// To implement a server, implement an object which conforms to this protocol.
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
-internal protocol Google_Longrunning_OperationsAsyncProvider: CallHandlerProvider {
+public protocol Google_Longrunning_OperationsAsyncProvider: CallHandlerProvider {
   static var serviceDescriptor: GRPCServiceDescriptor { get }
   var interceptors: Google_Longrunning_OperationsServerInterceptorFactoryProtocol? { get }
 
@@ -578,19 +578,19 @@ internal protocol Google_Longrunning_OperationsAsyncProvider: CallHandlerProvide
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension Google_Longrunning_OperationsAsyncProvider {
-  internal static var serviceDescriptor: GRPCServiceDescriptor {
+  public static var serviceDescriptor: GRPCServiceDescriptor {
     return Google_Longrunning_OperationsServerMetadata.serviceDescriptor
   }
 
-  internal var serviceName: Substring {
+  public var serviceName: Substring {
     return Google_Longrunning_OperationsServerMetadata.serviceDescriptor.fullName[...]
   }
 
-  internal var interceptors: Google_Longrunning_OperationsServerInterceptorFactoryProtocol? {
+  public var interceptors: Google_Longrunning_OperationsServerInterceptorFactoryProtocol? {
     return nil
   }
 
-  internal func handle(
+  public func handle(
     method name: Substring,
     context: CallHandlerContext
   ) -> GRPCServerHandlerProtocol? {
@@ -639,7 +639,7 @@ extension Google_Longrunning_OperationsAsyncProvider {
 
 #endif // compiler(>=5.6)
 
-internal protocol Google_Longrunning_OperationsServerInterceptorFactoryProtocol {
+public protocol Google_Longrunning_OperationsServerInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when handling 'getOperation'.
   ///   Defaults to calling `self.makeInterceptors()`.
@@ -658,8 +658,8 @@ internal protocol Google_Longrunning_OperationsServerInterceptorFactoryProtocol 
   func makeDeleteOperationInterceptors() -> [ServerInterceptor<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>]
 }
 
-internal enum Google_Longrunning_OperationsServerMetadata {
-  internal static let serviceDescriptor = GRPCServiceDescriptor(
+public enum Google_Longrunning_OperationsServerMetadata {
+  public static let serviceDescriptor = GRPCServiceDescriptor(
     name: "Operations",
     fullName: "google.longrunning.Operations",
     methods: [
@@ -670,26 +670,26 @@ internal enum Google_Longrunning_OperationsServerMetadata {
     ]
   )
 
-  internal enum Methods {
-    internal static let getOperation = GRPCMethodDescriptor(
+  public enum Methods {
+    public static let getOperation = GRPCMethodDescriptor(
       name: "GetOperation",
       path: "/google.longrunning.Operations/GetOperation",
       type: GRPCCallType.unary
     )
 
-    internal static let listOperations = GRPCMethodDescriptor(
+    public static let listOperations = GRPCMethodDescriptor(
       name: "ListOperations",
       path: "/google.longrunning.Operations/ListOperations",
       type: GRPCCallType.unary
     )
 
-    internal static let cancelOperation = GRPCMethodDescriptor(
+    public static let cancelOperation = GRPCMethodDescriptor(
       name: "CancelOperation",
       path: "/google.longrunning.Operations/CancelOperation",
       type: GRPCCallType.unary
     )
 
-    internal static let deleteOperation = GRPCMethodDescriptor(
+    public static let deleteOperation = GRPCMethodDescriptor(
       name: "DeleteOperation",
       path: "/google.longrunning.Operations/DeleteOperation",
       type: GRPCCallType.unary
