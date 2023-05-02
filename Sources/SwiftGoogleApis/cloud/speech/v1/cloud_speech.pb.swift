@@ -261,6 +261,8 @@ public struct Google_Cloud_Speech_V1_RecognitionConfig {
   /// information is returned. The default is ``false``.
   public var enableWordTimeOffsets: Bool = false
 
+  public var enableAutomaticPunctuation: Bool = false
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   /// Audio encoding of the data sent in the audio message. All encodings support
@@ -1027,6 +1029,7 @@ extension Google_Cloud_Speech_V1_RecognitionConfig: SwiftProtobuf.Message, Swift
     5: .standard(proto: "profanity_filter"),
     6: .standard(proto: "speech_contexts"),
     8: .standard(proto: "enable_word_time_offsets"),
+    11: .standard(proto: "enable_automatic_punctuation"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -1042,6 +1045,7 @@ extension Google_Cloud_Speech_V1_RecognitionConfig: SwiftProtobuf.Message, Swift
       case 5: try { try decoder.decodeSingularBoolField(value: &self.profanityFilter) }()
       case 6: try { try decoder.decodeRepeatedMessageField(value: &self.speechContexts) }()
       case 8: try { try decoder.decodeSingularBoolField(value: &self.enableWordTimeOffsets) }()
+      case 11: try { try decoder.decodeSingularBoolField(value: &self.enableAutomaticPunctuation) }()
       default: break
       }
     }
@@ -1069,6 +1073,9 @@ extension Google_Cloud_Speech_V1_RecognitionConfig: SwiftProtobuf.Message, Swift
     if self.enableWordTimeOffsets != false {
       try visitor.visitSingularBoolField(value: self.enableWordTimeOffsets, fieldNumber: 8)
     }
+    if self.enableAutomaticPunctuation != false {
+      try visitor.visitSingularBoolField(value: self.enableAutomaticPunctuation, fieldNumber: 11)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1080,6 +1087,7 @@ extension Google_Cloud_Speech_V1_RecognitionConfig: SwiftProtobuf.Message, Swift
     if lhs.profanityFilter != rhs.profanityFilter {return false}
     if lhs.speechContexts != rhs.speechContexts {return false}
     if lhs.enableWordTimeOffsets != rhs.enableWordTimeOffsets {return false}
+    if lhs.enableAutomaticPunctuation != rhs.enableAutomaticPunctuation {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

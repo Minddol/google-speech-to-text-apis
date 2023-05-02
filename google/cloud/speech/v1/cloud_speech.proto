@@ -208,6 +208,7 @@ message RecognitionConfig {
   // those words. If ``false``, no word-level time offset
   // information is returned. The default is ``false``.
   bool enable_word_time_offsets = 8;
+  bool enable_automatic_punctuation = 11;
 }
 
 // Provides "hints" to the speech recognizer to favor specific words and phrases
