@@ -177,7 +177,7 @@ public struct Google_Cloud_Speech_V1_StreamingRecognitionConfig {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// *Required* Provides information to the recognizer that specifies how to
+  /// Required. Provides information to the recognizer that specifies how to
   /// process the request.
   public var config: Google_Cloud_Speech_V1_RecognitionConfig {
     get {return _config ?? Google_Cloud_Speech_V1_RecognitionConfig()}
@@ -188,7 +188,7 @@ public struct Google_Cloud_Speech_V1_StreamingRecognitionConfig {
   /// Clears the value of `config`. Subsequent reads from it will return its default value.
   public mutating func clearConfig() {self._config = nil}
 
-  /// *Optional* If `false` or omitted, the recognizer will perform continuous
+  /// If `false` or omitted, the recognizer will perform continuous
   /// recognition (continuing to wait for and process audio even if the user
   /// pauses speaking) until the client closes the input stream (gRPC API) or
   /// until the maximum time limit has been reached. May return multiple
@@ -199,19 +199,80 @@ public struct Google_Cloud_Speech_V1_StreamingRecognitionConfig {
   /// `END_OF_SINGLE_UTTERANCE` event and cease recognition. It will return no
   /// more than one `StreamingRecognitionResult` with the `is_final` flag set to
   /// `true`.
+  ///
+  /// The `single_utterance` field can only be used with specified models,
+  /// otherwise an error is thrown. The `model` field in [`RecognitionConfig`][]
+  /// must be set to:
+  ///
+  /// * `command_and_search`
+  /// * `phone_call` AND additional field `useEnhanced`=`true`
+  /// * The `model` field is left undefined. In this case the API auto-selects
+  ///   a model based on any other parameters that you set in
+  ///   `RecognitionConfig`.
   public var singleUtterance: Bool = false
 
-  /// *Optional* If `true`, interim results (tentative hypotheses) may be
+  /// If `true`, interim results (tentative hypotheses) may be
   /// returned as they become available (these interim results are indicated with
   /// the `is_final=false` flag).
   /// If `false` or omitted, only `is_final=true` result(s) are returned.
   public var interimResults: Bool = false
 
+  /// If `true`, responses with voice activity speech events will be returned as
+  /// they are detected.
+  public var enableVoiceActivityEvents: Bool = false
+
+  /// If set, the server will automatically close the stream after the specified
+  /// duration has elapsed after the last VOICE_ACTIVITY speech event has been
+  /// sent. The field `voice_activity_events` must also be set to true.
+  public var voiceActivityTimeout: Google_Cloud_Speech_V1_StreamingRecognitionConfig.VoiceActivityTimeout {
+    get {return _voiceActivityTimeout ?? Google_Cloud_Speech_V1_StreamingRecognitionConfig.VoiceActivityTimeout()}
+    set {_voiceActivityTimeout = newValue}
+  }
+  /// Returns true if `voiceActivityTimeout` has been explicitly set.
+  public var hasVoiceActivityTimeout: Bool {return self._voiceActivityTimeout != nil}
+  /// Clears the value of `voiceActivityTimeout`. Subsequent reads from it will return its default value.
+  public mutating func clearVoiceActivityTimeout() {self._voiceActivityTimeout = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  /// Events that a timeout can be set on for voice activity.
+  public struct VoiceActivityTimeout {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    /// Duration to timeout the stream if no speech begins.
+    public var speechStartTimeout: SwiftProtobuf.Google_Protobuf_Duration {
+      get {return _speechStartTimeout ?? SwiftProtobuf.Google_Protobuf_Duration()}
+      set {_speechStartTimeout = newValue}
+    }
+    /// Returns true if `speechStartTimeout` has been explicitly set.
+    public var hasSpeechStartTimeout: Bool {return self._speechStartTimeout != nil}
+    /// Clears the value of `speechStartTimeout`. Subsequent reads from it will return its default value.
+    public mutating func clearSpeechStartTimeout() {self._speechStartTimeout = nil}
+
+    /// Duration to timeout the stream after speech ends.
+    public var speechEndTimeout: SwiftProtobuf.Google_Protobuf_Duration {
+      get {return _speechEndTimeout ?? SwiftProtobuf.Google_Protobuf_Duration()}
+      set {_speechEndTimeout = newValue}
+    }
+    /// Returns true if `speechEndTimeout` has been explicitly set.
+    public var hasSpeechEndTimeout: Bool {return self._speechEndTimeout != nil}
+    /// Clears the value of `speechEndTimeout`. Subsequent reads from it will return its default value.
+    public mutating func clearSpeechEndTimeout() {self._speechEndTimeout = nil}
+
+    public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    public init() {}
+
+    fileprivate var _speechStartTimeout: SwiftProtobuf.Google_Protobuf_Duration? = nil
+    fileprivate var _speechEndTimeout: SwiftProtobuf.Google_Protobuf_Duration? = nil
+  }
 
   public init() {}
 
   fileprivate var _config: Google_Cloud_Speech_V1_RecognitionConfig? = nil
+  fileprivate var _voiceActivityTimeout: Google_Cloud_Speech_V1_StreamingRecognitionConfig.VoiceActivityTimeout? = nil
 }
 
 /// Provides information to the recognizer that specifies how to process the
@@ -261,6 +322,15 @@ public struct Google_Cloud_Speech_V1_RecognitionConfig {
   /// information is returned. The default is ``false``.
   public var enableWordTimeOffsets: Bool = false
 
+  /// If `true`, the top result includes a list of words and the
+  /// confidence for those words. If `false`, no word-level confidence
+  /// information is returned. The default is `false`.
+  public var enableWordConfidence: Bool = false
+
+  /// If 'true', adds punctuation to recognition result hypotheses.
+  /// This feature is only available in select languages. Setting this for
+  /// requests in other languages has no effect at all.
+  /// The default 'false' value does not add punctuation to result hypotheses.
   public var enableAutomaticPunctuation: Bool = false
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -802,6 +872,7 @@ extension Google_Cloud_Speech_V1_LongRunningRecognizeRequest: @unchecked Sendabl
 extension Google_Cloud_Speech_V1_StreamingRecognizeRequest: @unchecked Sendable {}
 extension Google_Cloud_Speech_V1_StreamingRecognizeRequest.OneOf_StreamingRequest: @unchecked Sendable {}
 extension Google_Cloud_Speech_V1_StreamingRecognitionConfig: @unchecked Sendable {}
+extension Google_Cloud_Speech_V1_StreamingRecognitionConfig.VoiceActivityTimeout: @unchecked Sendable {}
 extension Google_Cloud_Speech_V1_RecognitionConfig: @unchecked Sendable {}
 extension Google_Cloud_Speech_V1_RecognitionConfig.AudioEncoding: @unchecked Sendable {}
 extension Google_Cloud_Speech_V1_SpeechContext: @unchecked Sendable {}
@@ -977,6 +1048,8 @@ extension Google_Cloud_Speech_V1_StreamingRecognitionConfig: SwiftProtobuf.Messa
     1: .same(proto: "config"),
     2: .standard(proto: "single_utterance"),
     3: .standard(proto: "interim_results"),
+    5: .standard(proto: "enable_voice_activity_events"),
+    6: .standard(proto: "voice_activity_timeout"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -988,6 +1061,8 @@ extension Google_Cloud_Speech_V1_StreamingRecognitionConfig: SwiftProtobuf.Messa
       case 1: try { try decoder.decodeSingularMessageField(value: &self._config) }()
       case 2: try { try decoder.decodeSingularBoolField(value: &self.singleUtterance) }()
       case 3: try { try decoder.decodeSingularBoolField(value: &self.interimResults) }()
+      case 5: try { try decoder.decodeSingularBoolField(value: &self.enableVoiceActivityEvents) }()
+      case 6: try { try decoder.decodeSingularMessageField(value: &self._voiceActivityTimeout) }()
       default: break
       }
     }
@@ -1007,6 +1082,12 @@ extension Google_Cloud_Speech_V1_StreamingRecognitionConfig: SwiftProtobuf.Messa
     if self.interimResults != false {
       try visitor.visitSingularBoolField(value: self.interimResults, fieldNumber: 3)
     }
+    if self.enableVoiceActivityEvents != false {
+      try visitor.visitSingularBoolField(value: self.enableVoiceActivityEvents, fieldNumber: 5)
+    }
+    try { if let v = self._voiceActivityTimeout {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1014,6 +1095,50 @@ extension Google_Cloud_Speech_V1_StreamingRecognitionConfig: SwiftProtobuf.Messa
     if lhs._config != rhs._config {return false}
     if lhs.singleUtterance != rhs.singleUtterance {return false}
     if lhs.interimResults != rhs.interimResults {return false}
+    if lhs.enableVoiceActivityEvents != rhs.enableVoiceActivityEvents {return false}
+    if lhs._voiceActivityTimeout != rhs._voiceActivityTimeout {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Google_Cloud_Speech_V1_StreamingRecognitionConfig.VoiceActivityTimeout: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = Google_Cloud_Speech_V1_StreamingRecognitionConfig.protoMessageName + ".VoiceActivityTimeout"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "speech_start_timeout"),
+    2: .standard(proto: "speech_end_timeout"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._speechStartTimeout) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._speechEndTimeout) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._speechStartTimeout {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._speechEndTimeout {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: Google_Cloud_Speech_V1_StreamingRecognitionConfig.VoiceActivityTimeout, rhs: Google_Cloud_Speech_V1_StreamingRecognitionConfig.VoiceActivityTimeout) -> Bool {
+    if lhs._speechStartTimeout != rhs._speechStartTimeout {return false}
+    if lhs._speechEndTimeout != rhs._speechEndTimeout {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -1029,6 +1154,7 @@ extension Google_Cloud_Speech_V1_RecognitionConfig: SwiftProtobuf.Message, Swift
     5: .standard(proto: "profanity_filter"),
     6: .standard(proto: "speech_contexts"),
     8: .standard(proto: "enable_word_time_offsets"),
+    15: .standard(proto: "enable_word_confidence"),
     11: .standard(proto: "enable_automatic_punctuation"),
   ]
 
@@ -1046,6 +1172,7 @@ extension Google_Cloud_Speech_V1_RecognitionConfig: SwiftProtobuf.Message, Swift
       case 6: try { try decoder.decodeRepeatedMessageField(value: &self.speechContexts) }()
       case 8: try { try decoder.decodeSingularBoolField(value: &self.enableWordTimeOffsets) }()
       case 11: try { try decoder.decodeSingularBoolField(value: &self.enableAutomaticPunctuation) }()
+      case 15: try { try decoder.decodeSingularBoolField(value: &self.enableWordConfidence) }()
       default: break
       }
     }
@@ -1076,6 +1203,9 @@ extension Google_Cloud_Speech_V1_RecognitionConfig: SwiftProtobuf.Message, Swift
     if self.enableAutomaticPunctuation != false {
       try visitor.visitSingularBoolField(value: self.enableAutomaticPunctuation, fieldNumber: 11)
     }
+    if self.enableWordConfidence != false {
+      try visitor.visitSingularBoolField(value: self.enableWordConfidence, fieldNumber: 15)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1087,6 +1217,7 @@ extension Google_Cloud_Speech_V1_RecognitionConfig: SwiftProtobuf.Message, Swift
     if lhs.profanityFilter != rhs.profanityFilter {return false}
     if lhs.speechContexts != rhs.speechContexts {return false}
     if lhs.enableWordTimeOffsets != rhs.enableWordTimeOffsets {return false}
+    if lhs.enableWordConfidence != rhs.enableWordConfidence {return false}
     if lhs.enableAutomaticPunctuation != rhs.enableAutomaticPunctuation {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true

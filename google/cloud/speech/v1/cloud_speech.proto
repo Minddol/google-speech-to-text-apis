@@ -87,11 +87,20 @@ message StreamingRecognizeRequest {
 // Provides information to the recognizer that specifies how to process the
 // request.
 message StreamingRecognitionConfig {
-  // *Required* Provides information to the recognizer that specifies how to
+  // Events that a timeout can be set on for voice activity.
+  message VoiceActivityTimeout {
+    // Duration to timeout the stream if no speech begins.
+    google.protobuf.Duration speech_start_timeout = 1;
+
+    // Duration to timeout the stream after speech ends.
+    google.protobuf.Duration speech_end_timeout = 2;
+  }
+
+  // Required. Provides information to the recognizer that specifies how to
   // process the request.
   RecognitionConfig config = 1;
 
-  // *Optional* If `false` or omitted, the recognizer will perform continuous
+  // If `false` or omitted, the recognizer will perform continuous
   // recognition (continuing to wait for and process audio even if the user
   // pauses speaking) until the client closes the input stream (gRPC API) or
   // until the maximum time limit has been reached. May return multiple
@@ -102,13 +111,32 @@ message StreamingRecognitionConfig {
   // `END_OF_SINGLE_UTTERANCE` event and cease recognition. It will return no
   // more than one `StreamingRecognitionResult` with the `is_final` flag set to
   // `true`.
+  //
+  // The `single_utterance` field can only be used with specified models,
+  // otherwise an error is thrown. The `model` field in [`RecognitionConfig`][]
+  // must be set to:
+  //
+  // * `command_and_search`
+  // * `phone_call` AND additional field `useEnhanced`=`true`
+  // * The `model` field is left undefined. In this case the API auto-selects
+  //   a model based on any other parameters that you set in
+  //   `RecognitionConfig`.
   bool single_utterance = 2;
 
-  // *Optional* If `true`, interim results (tentative hypotheses) may be
+  // If `true`, interim results (tentative hypotheses) may be
   // returned as they become available (these interim results are indicated with
   // the `is_final=false` flag).
   // If `false` or omitted, only `is_final=true` result(s) are returned.
   bool interim_results = 3;
+
+  // If `true`, responses with voice activity speech events will be returned as
+  // they are detected.
+  bool enable_voice_activity_events = 5;
+
+  // If set, the server will automatically close the stream after the specified
+  // duration has elapsed after the last VOICE_ACTIVITY speech event has been
+  // sent. The field `voice_activity_events` must also be set to true.
+  VoiceActivityTimeout voice_activity_timeout = 6;
 }
 
 // Provides information to the recognizer that specifies how to process the
@@ -208,6 +236,16 @@ message RecognitionConfig {
   // those words. If ``false``, no word-level time offset
   // information is returned. The default is ``false``.
   bool enable_word_time_offsets = 8;
+    
+    // If `true`, the top result includes a list of words and the
+    // confidence for those words. If `false`, no word-level confidence
+    // information is returned. The default is `false`.
+    bool enable_word_confidence = 15;
+    
+    // If 'true', adds punctuation to recognition result hypotheses.
+    // This feature is only available in select languages. Setting this for
+    // requests in other languages has no effect at all.
+    // The default 'false' value does not add punctuation to result hypotheses.
   bool enable_automatic_punctuation = 11;
 }
 
