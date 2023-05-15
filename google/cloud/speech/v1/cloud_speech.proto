@@ -247,6 +247,59 @@ message RecognitionConfig {
     // requests in other languages has no effect at all.
     // The default 'false' value does not add punctuation to result hypotheses.
   bool enable_automatic_punctuation = 11;
+    
+    // Which model to select for the given request. Select the model
+    // best suited to your domain to get best results. If a model is not
+    // explicitly specified, then we auto-select a model based on the parameters
+    // in the RecognitionConfig.
+    // <table>
+    //   <tr>
+    //     <td><b>Model</b></td>
+    //     <td><b>Description</b></td>
+    //   </tr>
+    //   <tr>
+    //     <td><code>latest_long</code></td>
+    //     <td>Best for long form content like media or conversation.</td>
+    //   </tr>
+    //   <tr>
+    //     <td><code>latest_short</code></td>
+    //     <td>Best for short form content like commands or single shot directed
+    //     speech.</td>
+    //   </tr>
+    //   <tr>
+    //     <td><code>command_and_search</code></td>
+    //     <td>Best for short queries such as voice commands or voice search.</td>
+    //   </tr>
+    //   <tr>
+    //     <td><code>phone_call</code></td>
+    //     <td>Best for audio that originated from a phone call (typically
+    //     recorded at an 8khz sampling rate).</td>
+    //   </tr>
+    //   <tr>
+    //     <td><code>video</code></td>
+    //     <td>Best for audio that originated from video or includes multiple
+    //         speakers. Ideally the audio is recorded at a 16khz or greater
+    //         sampling rate. This is a premium model that costs more than the
+    //         standard rate.</td>
+    //   </tr>
+    //   <tr>
+    //     <td><code>default</code></td>
+    //     <td>Best for audio that is not one of the specific audio models.
+    //         For example, long-form audio. Ideally the audio is high-fidelity,
+    //         recorded at a 16khz or greater sampling rate.</td>
+    //   </tr>
+    //   <tr>
+    //     <td><code>medical_conversation</code></td>
+    //     <td>Best for audio that originated from a conversation between a
+    //         medical provider and patient.</td>
+    //   </tr>
+    //   <tr>
+    //     <td><code>medical_dictation</code></td>
+    //     <td>Best for audio that originated from dictation notes by a medical
+    //         provider.</td>
+    //   </tr>
+    // </table>
+    string model = 13;
 }
 
 // Provides "hints" to the speech recognizer to favor specific words and phrases
