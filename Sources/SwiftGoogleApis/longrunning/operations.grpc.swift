@@ -31,36 +31,40 @@ import SwiftProtobuf
 /// When an API method normally takes long time to complete, it can be designed
 /// to return [Operation][google.longrunning.Operation] to the client, and the client can use this
 /// interface to receive the real response asynchronously by polling the
-/// operation resource, or using `google.watcher.v1.Watcher` interface to watch
-/// the response, or pass the operation resource to another API (such as Google
-/// Cloud Pub/Sub API) to receive the response.  Any API service that returns
-/// long-running operations should implement the `Operations` interface so
-/// developers can have a consistent client experience.
+/// operation resource, or pass the operation resource to another API (such as
+/// Google Cloud Pub/Sub API) to receive the response.  Any API service that
+/// returns long-running operations should implement the `Operations` interface
+/// so developers can have a consistent client experience.
 ///
 /// Usage: instantiate `Google_Longrunning_OperationsClient`, then call methods of this protocol to make API calls.
 public protocol Google_Longrunning_OperationsClientProtocol: GRPCClient {
   var serviceName: String { get }
   var interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol? { get }
 
+  func listOperations(
+    _ request: Google_Longrunning_ListOperationsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<Google_Longrunning_ListOperationsRequest, Google_Longrunning_ListOperationsResponse>
+
   func getOperation(
     _ request: Google_Longrunning_GetOperationRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Google_Longrunning_GetOperationRequest, Google_Longrunning_Operation>
 
-  func listOperations(
-    _ request: Google_Longrunning_ListOperationsRequest,
+  func deleteOperation(
+    _ request: Google_Longrunning_DeleteOperationRequest,
     callOptions: CallOptions?
-  ) -> UnaryCall<Google_Longrunning_ListOperationsRequest, Google_Longrunning_ListOperationsResponse>
+  ) -> UnaryCall<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>
 
   func cancelOperation(
     _ request: Google_Longrunning_CancelOperationRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<Google_Longrunning_CancelOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>
 
-  func deleteOperation(
-    _ request: Google_Longrunning_DeleteOperationRequest,
+  func waitOperation(
+    _ request: Google_Longrunning_WaitOperationRequest,
     callOptions: CallOptions?
-  ) -> UnaryCall<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>
+  ) -> UnaryCall<Google_Longrunning_WaitOperationRequest, Google_Longrunning_Operation>
 }
 
 extension Google_Longrunning_OperationsClientProtocol {
@@ -68,7 +72,34 @@ extension Google_Longrunning_OperationsClientProtocol {
     return "google.longrunning.Operations"
   }
 
-  /// Gets the latest state of a long-running operation.  Clients may use this
+  /// Lists operations that match the specified filter in the request. If the
+  /// server doesn't support this method, it returns `UNIMPLEMENTED`.
+  ///
+  /// NOTE: the `name` binding allows API services to override the binding
+  /// to use different resource name schemes, such as `users/*/operations`. To
+  /// override the binding, API services can add a binding such as
+  /// `"/v1/{name=users/*}/operations"` to their service configuration.
+  /// For backwards compatibility, the default name includes the operations
+  /// collection id, however overriding users must ensure the name binding
+  /// is the parent resource, without the operations collection id.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ListOperations.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func listOperations(
+    _ request: Google_Longrunning_ListOperationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<Google_Longrunning_ListOperationsRequest, Google_Longrunning_ListOperationsResponse> {
+    return self.makeUnaryCall(
+      path: Google_Longrunning_OperationsClientMetadata.Methods.listOperations.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListOperationsInterceptors() ?? []
+    )
+  }
+
+  /// Gets the latest state of a long-running operation.  Clients can use this
   /// method to poll the operation result at intervals as recommended by the API
   /// service.
   ///
@@ -88,32 +119,37 @@ extension Google_Longrunning_OperationsClientProtocol {
     )
   }
 
-  /// Lists operations that match the specified filter in the request. If the
-  /// server doesn't support this method, it returns
+  /// Deletes a long-running operation. This method indicates that the client is
+  /// no longer interested in the operation result. It does not cancel the
+  /// operation. If the server doesn't support this method, it returns
   /// `google.rpc.Code.UNIMPLEMENTED`.
   ///
   /// - Parameters:
-  ///   - request: Request to send to ListOperations.
+  ///   - request: Request to send to DeleteOperation.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func listOperations(
-    _ request: Google_Longrunning_ListOperationsRequest,
+  public func deleteOperation(
+    _ request: Google_Longrunning_DeleteOperationRequest,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Google_Longrunning_ListOperationsRequest, Google_Longrunning_ListOperationsResponse> {
+  ) -> UnaryCall<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty> {
     return self.makeUnaryCall(
-      path: Google_Longrunning_OperationsClientMetadata.Methods.listOperations.path,
+      path: Google_Longrunning_OperationsClientMetadata.Methods.deleteOperation.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeListOperationsInterceptors() ?? []
+      interceptors: self.interceptors?.makeDeleteOperationInterceptors() ?? []
     )
   }
 
   /// Starts asynchronous cancellation on a long-running operation.  The server
   /// makes a best effort to cancel the operation, but success is not
   /// guaranteed.  If the server doesn't support this method, it returns
-  /// `google.rpc.Code.UNIMPLEMENTED`.  Clients may use
-  /// [Operations.GetOperation] or other methods to check whether the
-  /// cancellation succeeded or the operation completed despite cancellation.
+  /// `google.rpc.Code.UNIMPLEMENTED`.  Clients can use
+  /// [Operations.GetOperation][google.longrunning.Operations.GetOperation] or
+  /// other methods to check whether the cancellation succeeded or whether the
+  /// operation completed despite cancellation. On successful cancellation,
+  /// the operation is not deleted; instead, it becomes an operation with
+  /// an [Operation.error][google.longrunning.Operation.error] value with a [google.rpc.Status.code][google.rpc.Status.code] of 1,
+  /// corresponding to `Code.CANCELLED`.
   ///
   /// - Parameters:
   ///   - request: Request to send to CancelOperation.
@@ -131,22 +167,29 @@ extension Google_Longrunning_OperationsClientProtocol {
     )
   }
 
-  /// Deletes a long-running operation.  It indicates the client is no longer
-  /// interested in the operation result. It does not cancel the operation.
+  /// Waits until the specified long-running operation is done or reaches at most
+  /// a specified timeout, returning the latest state.  If the operation is
+  /// already done, the latest state is immediately returned.  If the timeout
+  /// specified is greater than the default HTTP/RPC timeout, the HTTP/RPC
+  /// timeout is used.  If the server does not support this method, it returns
+  /// `google.rpc.Code.UNIMPLEMENTED`.
+  /// Note that this method is on a best-effort basis.  It may return the latest
+  /// state before the specified timeout (including immediately), meaning even an
+  /// immediate response is no guarantee that the operation is done.
   ///
   /// - Parameters:
-  ///   - request: Request to send to DeleteOperation.
+  ///   - request: Request to send to WaitOperation.
   ///   - callOptions: Call options.
   /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
-  public func deleteOperation(
-    _ request: Google_Longrunning_DeleteOperationRequest,
+  public func waitOperation(
+    _ request: Google_Longrunning_WaitOperationRequest,
     callOptions: CallOptions? = nil
-  ) -> UnaryCall<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+  ) -> UnaryCall<Google_Longrunning_WaitOperationRequest, Google_Longrunning_Operation> {
     return self.makeUnaryCall(
-      path: Google_Longrunning_OperationsClientMetadata.Methods.deleteOperation.path,
+      path: Google_Longrunning_OperationsClientMetadata.Methods.waitOperation.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeDeleteOperationInterceptors() ?? []
+      interceptors: self.interceptors?.makeWaitOperationInterceptors() ?? []
     )
   }
 }
@@ -216,35 +259,39 @@ public struct Google_Longrunning_OperationsNIOClient: Google_Longrunning_Operati
 /// When an API method normally takes long time to complete, it can be designed
 /// to return [Operation][google.longrunning.Operation] to the client, and the client can use this
 /// interface to receive the real response asynchronously by polling the
-/// operation resource, or using `google.watcher.v1.Watcher` interface to watch
-/// the response, or pass the operation resource to another API (such as Google
-/// Cloud Pub/Sub API) to receive the response.  Any API service that returns
-/// long-running operations should implement the `Operations` interface so
-/// developers can have a consistent client experience.
+/// operation resource, or pass the operation resource to another API (such as
+/// Google Cloud Pub/Sub API) to receive the response.  Any API service that
+/// returns long-running operations should implement the `Operations` interface
+/// so developers can have a consistent client experience.
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 public protocol Google_Longrunning_OperationsAsyncClientProtocol: GRPCClient {
   static var serviceDescriptor: GRPCServiceDescriptor { get }
   var interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol? { get }
-
-  func makeGetOperationCall(
-    _ request: Google_Longrunning_GetOperationRequest,
-    callOptions: CallOptions?
-  ) -> GRPCAsyncUnaryCall<Google_Longrunning_GetOperationRequest, Google_Longrunning_Operation>
 
   func makeListOperationsCall(
     _ request: Google_Longrunning_ListOperationsRequest,
     callOptions: CallOptions?
   ) -> GRPCAsyncUnaryCall<Google_Longrunning_ListOperationsRequest, Google_Longrunning_ListOperationsResponse>
 
-  func makeCancelOperationCall(
-    _ request: Google_Longrunning_CancelOperationRequest,
+  func makeGetOperationCall(
+    _ request: Google_Longrunning_GetOperationRequest,
     callOptions: CallOptions?
-  ) -> GRPCAsyncUnaryCall<Google_Longrunning_CancelOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>
+  ) -> GRPCAsyncUnaryCall<Google_Longrunning_GetOperationRequest, Google_Longrunning_Operation>
 
   func makeDeleteOperationCall(
     _ request: Google_Longrunning_DeleteOperationRequest,
     callOptions: CallOptions?
   ) -> GRPCAsyncUnaryCall<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func makeCancelOperationCall(
+    _ request: Google_Longrunning_CancelOperationRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Google_Longrunning_CancelOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>
+
+  func makeWaitOperationCall(
+    _ request: Google_Longrunning_WaitOperationRequest,
+    callOptions: CallOptions?
+  ) -> GRPCAsyncUnaryCall<Google_Longrunning_WaitOperationRequest, Google_Longrunning_Operation>
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -255,6 +302,18 @@ extension Google_Longrunning_OperationsAsyncClientProtocol {
 
   public var interceptors: Google_Longrunning_OperationsClientInterceptorFactoryProtocol? {
     return nil
+  }
+
+  public func makeListOperationsCall(
+    _ request: Google_Longrunning_ListOperationsRequest,
+    callOptions: CallOptions? = nil
+  ) -> GRPCAsyncUnaryCall<Google_Longrunning_ListOperationsRequest, Google_Longrunning_ListOperationsResponse> {
+    return self.makeAsyncUnaryCall(
+      path: Google_Longrunning_OperationsClientMetadata.Methods.listOperations.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListOperationsInterceptors() ?? []
+    )
   }
 
   public func makeGetOperationCall(
@@ -269,15 +328,15 @@ extension Google_Longrunning_OperationsAsyncClientProtocol {
     )
   }
 
-  public func makeListOperationsCall(
-    _ request: Google_Longrunning_ListOperationsRequest,
+  public func makeDeleteOperationCall(
+    _ request: Google_Longrunning_DeleteOperationRequest,
     callOptions: CallOptions? = nil
-  ) -> GRPCAsyncUnaryCall<Google_Longrunning_ListOperationsRequest, Google_Longrunning_ListOperationsResponse> {
+  ) -> GRPCAsyncUnaryCall<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty> {
     return self.makeAsyncUnaryCall(
-      path: Google_Longrunning_OperationsClientMetadata.Methods.listOperations.path,
+      path: Google_Longrunning_OperationsClientMetadata.Methods.deleteOperation.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeListOperationsInterceptors() ?? []
+      interceptors: self.interceptors?.makeDeleteOperationInterceptors() ?? []
     )
   }
 
@@ -293,21 +352,33 @@ extension Google_Longrunning_OperationsAsyncClientProtocol {
     )
   }
 
-  public func makeDeleteOperationCall(
-    _ request: Google_Longrunning_DeleteOperationRequest,
+  public func makeWaitOperationCall(
+    _ request: Google_Longrunning_WaitOperationRequest,
     callOptions: CallOptions? = nil
-  ) -> GRPCAsyncUnaryCall<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty> {
+  ) -> GRPCAsyncUnaryCall<Google_Longrunning_WaitOperationRequest, Google_Longrunning_Operation> {
     return self.makeAsyncUnaryCall(
-      path: Google_Longrunning_OperationsClientMetadata.Methods.deleteOperation.path,
+      path: Google_Longrunning_OperationsClientMetadata.Methods.waitOperation.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeDeleteOperationInterceptors() ?? []
+      interceptors: self.interceptors?.makeWaitOperationInterceptors() ?? []
     )
   }
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
 extension Google_Longrunning_OperationsAsyncClientProtocol {
+  public func listOperations(
+    _ request: Google_Longrunning_ListOperationsRequest,
+    callOptions: CallOptions? = nil
+  ) async throws -> Google_Longrunning_ListOperationsResponse {
+    return try await self.performAsyncUnaryCall(
+      path: Google_Longrunning_OperationsClientMetadata.Methods.listOperations.path,
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeListOperationsInterceptors() ?? []
+    )
+  }
+
   public func getOperation(
     _ request: Google_Longrunning_GetOperationRequest,
     callOptions: CallOptions? = nil
@@ -320,15 +391,15 @@ extension Google_Longrunning_OperationsAsyncClientProtocol {
     )
   }
 
-  public func listOperations(
-    _ request: Google_Longrunning_ListOperationsRequest,
+  public func deleteOperation(
+    _ request: Google_Longrunning_DeleteOperationRequest,
     callOptions: CallOptions? = nil
-  ) async throws -> Google_Longrunning_ListOperationsResponse {
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty {
     return try await self.performAsyncUnaryCall(
-      path: Google_Longrunning_OperationsClientMetadata.Methods.listOperations.path,
+      path: Google_Longrunning_OperationsClientMetadata.Methods.deleteOperation.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeListOperationsInterceptors() ?? []
+      interceptors: self.interceptors?.makeDeleteOperationInterceptors() ?? []
     )
   }
 
@@ -344,15 +415,15 @@ extension Google_Longrunning_OperationsAsyncClientProtocol {
     )
   }
 
-  public func deleteOperation(
-    _ request: Google_Longrunning_DeleteOperationRequest,
+  public func waitOperation(
+    _ request: Google_Longrunning_WaitOperationRequest,
     callOptions: CallOptions? = nil
-  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty {
+  ) async throws -> Google_Longrunning_Operation {
     return try await self.performAsyncUnaryCall(
-      path: Google_Longrunning_OperationsClientMetadata.Methods.deleteOperation.path,
+      path: Google_Longrunning_OperationsClientMetadata.Methods.waitOperation.path,
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
-      interceptors: self.interceptors?.makeDeleteOperationInterceptors() ?? []
+      interceptors: self.interceptors?.makeWaitOperationInterceptors() ?? []
     )
   }
 }
@@ -378,17 +449,20 @@ public struct Google_Longrunning_OperationsAsyncClient: Google_Longrunning_Opera
 
 public protocol Google_Longrunning_OperationsClientInterceptorFactoryProtocol: GRPCSendable {
 
+  /// - Returns: Interceptors to use when invoking 'listOperations'.
+  func makeListOperationsInterceptors() -> [ClientInterceptor<Google_Longrunning_ListOperationsRequest, Google_Longrunning_ListOperationsResponse>]
+
   /// - Returns: Interceptors to use when invoking 'getOperation'.
   func makeGetOperationInterceptors() -> [ClientInterceptor<Google_Longrunning_GetOperationRequest, Google_Longrunning_Operation>]
 
-  /// - Returns: Interceptors to use when invoking 'listOperations'.
-  func makeListOperationsInterceptors() -> [ClientInterceptor<Google_Longrunning_ListOperationsRequest, Google_Longrunning_ListOperationsResponse>]
+  /// - Returns: Interceptors to use when invoking 'deleteOperation'.
+  func makeDeleteOperationInterceptors() -> [ClientInterceptor<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>]
 
   /// - Returns: Interceptors to use when invoking 'cancelOperation'.
   func makeCancelOperationInterceptors() -> [ClientInterceptor<Google_Longrunning_CancelOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>]
 
-  /// - Returns: Interceptors to use when invoking 'deleteOperation'.
-  func makeDeleteOperationInterceptors() -> [ClientInterceptor<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+  /// - Returns: Interceptors to use when invoking 'waitOperation'.
+  func makeWaitOperationInterceptors() -> [ClientInterceptor<Google_Longrunning_WaitOperationRequest, Google_Longrunning_Operation>]
 }
 
 public enum Google_Longrunning_OperationsClientMetadata {
@@ -396,23 +470,30 @@ public enum Google_Longrunning_OperationsClientMetadata {
     name: "Operations",
     fullName: "google.longrunning.Operations",
     methods: [
-      Google_Longrunning_OperationsClientMetadata.Methods.getOperation,
       Google_Longrunning_OperationsClientMetadata.Methods.listOperations,
-      Google_Longrunning_OperationsClientMetadata.Methods.cancelOperation,
+      Google_Longrunning_OperationsClientMetadata.Methods.getOperation,
       Google_Longrunning_OperationsClientMetadata.Methods.deleteOperation,
+      Google_Longrunning_OperationsClientMetadata.Methods.cancelOperation,
+      Google_Longrunning_OperationsClientMetadata.Methods.waitOperation,
     ]
   )
 
   public enum Methods {
+    public static let listOperations = GRPCMethodDescriptor(
+      name: "ListOperations",
+      path: "/google.longrunning.Operations/ListOperations",
+      type: GRPCCallType.unary
+    )
+
     public static let getOperation = GRPCMethodDescriptor(
       name: "GetOperation",
       path: "/google.longrunning.Operations/GetOperation",
       type: GRPCCallType.unary
     )
 
-    public static let listOperations = GRPCMethodDescriptor(
-      name: "ListOperations",
-      path: "/google.longrunning.Operations/ListOperations",
+    public static let deleteOperation = GRPCMethodDescriptor(
+      name: "DeleteOperation",
+      path: "/google.longrunning.Operations/DeleteOperation",
       type: GRPCCallType.unary
     )
 
@@ -422,9 +503,9 @@ public enum Google_Longrunning_OperationsClientMetadata {
       type: GRPCCallType.unary
     )
 
-    public static let deleteOperation = GRPCMethodDescriptor(
-      name: "DeleteOperation",
-      path: "/google.longrunning.Operations/DeleteOperation",
+    public static let waitOperation = GRPCMethodDescriptor(
+      name: "WaitOperation",
+      path: "/google.longrunning.Operations/WaitOperation",
       type: GRPCCallType.unary
     )
   }
@@ -435,37 +516,60 @@ public enum Google_Longrunning_OperationsClientMetadata {
 /// When an API method normally takes long time to complete, it can be designed
 /// to return [Operation][google.longrunning.Operation] to the client, and the client can use this
 /// interface to receive the real response asynchronously by polling the
-/// operation resource, or using `google.watcher.v1.Watcher` interface to watch
-/// the response, or pass the operation resource to another API (such as Google
-/// Cloud Pub/Sub API) to receive the response.  Any API service that returns
-/// long-running operations should implement the `Operations` interface so
-/// developers can have a consistent client experience.
+/// operation resource, or pass the operation resource to another API (such as
+/// Google Cloud Pub/Sub API) to receive the response.  Any API service that
+/// returns long-running operations should implement the `Operations` interface
+/// so developers can have a consistent client experience.
 ///
 /// To build a server, implement a class that conforms to this protocol.
 public protocol Google_Longrunning_OperationsProvider: CallHandlerProvider {
   var interceptors: Google_Longrunning_OperationsServerInterceptorFactoryProtocol? { get }
 
-  /// Gets the latest state of a long-running operation.  Clients may use this
+  /// Lists operations that match the specified filter in the request. If the
+  /// server doesn't support this method, it returns `UNIMPLEMENTED`.
+  ///
+  /// NOTE: the `name` binding allows API services to override the binding
+  /// to use different resource name schemes, such as `users/*/operations`. To
+  /// override the binding, API services can add a binding such as
+  /// `"/v1/{name=users/*}/operations"` to their service configuration.
+  /// For backwards compatibility, the default name includes the operations
+  /// collection id, however overriding users must ensure the name binding
+  /// is the parent resource, without the operations collection id.
+  func listOperations(request: Google_Longrunning_ListOperationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Google_Longrunning_ListOperationsResponse>
+
+  /// Gets the latest state of a long-running operation.  Clients can use this
   /// method to poll the operation result at intervals as recommended by the API
   /// service.
   func getOperation(request: Google_Longrunning_GetOperationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Google_Longrunning_Operation>
 
-  /// Lists operations that match the specified filter in the request. If the
-  /// server doesn't support this method, it returns
+  /// Deletes a long-running operation. This method indicates that the client is
+  /// no longer interested in the operation result. It does not cancel the
+  /// operation. If the server doesn't support this method, it returns
   /// `google.rpc.Code.UNIMPLEMENTED`.
-  func listOperations(request: Google_Longrunning_ListOperationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Google_Longrunning_ListOperationsResponse>
+  func deleteOperation(request: Google_Longrunning_DeleteOperationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
 
   /// Starts asynchronous cancellation on a long-running operation.  The server
   /// makes a best effort to cancel the operation, but success is not
   /// guaranteed.  If the server doesn't support this method, it returns
-  /// `google.rpc.Code.UNIMPLEMENTED`.  Clients may use
-  /// [Operations.GetOperation] or other methods to check whether the
-  /// cancellation succeeded or the operation completed despite cancellation.
+  /// `google.rpc.Code.UNIMPLEMENTED`.  Clients can use
+  /// [Operations.GetOperation][google.longrunning.Operations.GetOperation] or
+  /// other methods to check whether the cancellation succeeded or whether the
+  /// operation completed despite cancellation. On successful cancellation,
+  /// the operation is not deleted; instead, it becomes an operation with
+  /// an [Operation.error][google.longrunning.Operation.error] value with a [google.rpc.Status.code][google.rpc.Status.code] of 1,
+  /// corresponding to `Code.CANCELLED`.
   func cancelOperation(request: Google_Longrunning_CancelOperationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
 
-  /// Deletes a long-running operation.  It indicates the client is no longer
-  /// interested in the operation result. It does not cancel the operation.
-  func deleteOperation(request: Google_Longrunning_DeleteOperationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<SwiftProtobuf.Google_Protobuf_Empty>
+  /// Waits until the specified long-running operation is done or reaches at most
+  /// a specified timeout, returning the latest state.  If the operation is
+  /// already done, the latest state is immediately returned.  If the timeout
+  /// specified is greater than the default HTTP/RPC timeout, the HTTP/RPC
+  /// timeout is used.  If the server does not support this method, it returns
+  /// `google.rpc.Code.UNIMPLEMENTED`.
+  /// Note that this method is on a best-effort basis.  It may return the latest
+  /// state before the specified timeout (including immediately), meaning even an
+  /// immediate response is no guarantee that the operation is done.
+  func waitOperation(request: Google_Longrunning_WaitOperationRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Google_Longrunning_Operation>
 }
 
 extension Google_Longrunning_OperationsProvider {
@@ -480,6 +584,15 @@ extension Google_Longrunning_OperationsProvider {
     context: CallHandlerContext
   ) -> GRPCServerHandlerProtocol? {
     switch name {
+    case "ListOperations":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Google_Longrunning_ListOperationsRequest>(),
+        responseSerializer: ProtobufSerializer<Google_Longrunning_ListOperationsResponse>(),
+        interceptors: self.interceptors?.makeListOperationsInterceptors() ?? [],
+        userFunction: self.listOperations(request:context:)
+      )
+
     case "GetOperation":
       return UnaryServerHandler(
         context: context,
@@ -489,13 +602,13 @@ extension Google_Longrunning_OperationsProvider {
         userFunction: self.getOperation(request:context:)
       )
 
-    case "ListOperations":
+    case "DeleteOperation":
       return UnaryServerHandler(
         context: context,
-        requestDeserializer: ProtobufDeserializer<Google_Longrunning_ListOperationsRequest>(),
-        responseSerializer: ProtobufSerializer<Google_Longrunning_ListOperationsResponse>(),
-        interceptors: self.interceptors?.makeListOperationsInterceptors() ?? [],
-        userFunction: self.listOperations(request:context:)
+        requestDeserializer: ProtobufDeserializer<Google_Longrunning_DeleteOperationRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeDeleteOperationInterceptors() ?? [],
+        userFunction: self.deleteOperation(request:context:)
       )
 
     case "CancelOperation":
@@ -507,13 +620,13 @@ extension Google_Longrunning_OperationsProvider {
         userFunction: self.cancelOperation(request:context:)
       )
 
-    case "DeleteOperation":
+    case "WaitOperation":
       return UnaryServerHandler(
         context: context,
-        requestDeserializer: ProtobufDeserializer<Google_Longrunning_DeleteOperationRequest>(),
-        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
-        interceptors: self.interceptors?.makeDeleteOperationInterceptors() ?? [],
-        userFunction: self.deleteOperation(request:context:)
+        requestDeserializer: ProtobufDeserializer<Google_Longrunning_WaitOperationRequest>(),
+        responseSerializer: ProtobufSerializer<Google_Longrunning_Operation>(),
+        interceptors: self.interceptors?.makeWaitOperationInterceptors() ?? [],
+        userFunction: self.waitOperation(request:context:)
       )
 
     default:
@@ -529,11 +642,10 @@ extension Google_Longrunning_OperationsProvider {
 /// When an API method normally takes long time to complete, it can be designed
 /// to return [Operation][google.longrunning.Operation] to the client, and the client can use this
 /// interface to receive the real response asynchronously by polling the
-/// operation resource, or using `google.watcher.v1.Watcher` interface to watch
-/// the response, or pass the operation resource to another API (such as Google
-/// Cloud Pub/Sub API) to receive the response.  Any API service that returns
-/// long-running operations should implement the `Operations` interface so
-/// developers can have a consistent client experience.
+/// operation resource, or pass the operation resource to another API (such as
+/// Google Cloud Pub/Sub API) to receive the response.  Any API service that
+/// returns long-running operations should implement the `Operations` interface
+/// so developers can have a consistent client experience.
 ///
 /// To implement a server, implement an object which conforms to this protocol.
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -541,7 +653,22 @@ public protocol Google_Longrunning_OperationsAsyncProvider: CallHandlerProvider 
   static var serviceDescriptor: GRPCServiceDescriptor { get }
   var interceptors: Google_Longrunning_OperationsServerInterceptorFactoryProtocol? { get }
 
-  /// Gets the latest state of a long-running operation.  Clients may use this
+  /// Lists operations that match the specified filter in the request. If the
+  /// server doesn't support this method, it returns `UNIMPLEMENTED`.
+  ///
+  /// NOTE: the `name` binding allows API services to override the binding
+  /// to use different resource name schemes, such as `users/*/operations`. To
+  /// override the binding, API services can add a binding such as
+  /// `"/v1/{name=users/*}/operations"` to their service configuration.
+  /// For backwards compatibility, the default name includes the operations
+  /// collection id, however overriding users must ensure the name binding
+  /// is the parent resource, without the operations collection id.
+  @Sendable func listOperations(
+    request: Google_Longrunning_ListOperationsRequest,
+    context: GRPCAsyncServerCallContext
+  ) async throws -> Google_Longrunning_ListOperationsResponse
+
+  /// Gets the latest state of a long-running operation.  Clients can use this
   /// method to poll the operation result at intervals as recommended by the API
   /// service.
   @Sendable func getOperation(
@@ -549,31 +676,43 @@ public protocol Google_Longrunning_OperationsAsyncProvider: CallHandlerProvider 
     context: GRPCAsyncServerCallContext
   ) async throws -> Google_Longrunning_Operation
 
-  /// Lists operations that match the specified filter in the request. If the
-  /// server doesn't support this method, it returns
+  /// Deletes a long-running operation. This method indicates that the client is
+  /// no longer interested in the operation result. It does not cancel the
+  /// operation. If the server doesn't support this method, it returns
   /// `google.rpc.Code.UNIMPLEMENTED`.
-  @Sendable func listOperations(
-    request: Google_Longrunning_ListOperationsRequest,
+  @Sendable func deleteOperation(
+    request: Google_Longrunning_DeleteOperationRequest,
     context: GRPCAsyncServerCallContext
-  ) async throws -> Google_Longrunning_ListOperationsResponse
+  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty
 
   /// Starts asynchronous cancellation on a long-running operation.  The server
   /// makes a best effort to cancel the operation, but success is not
   /// guaranteed.  If the server doesn't support this method, it returns
-  /// `google.rpc.Code.UNIMPLEMENTED`.  Clients may use
-  /// [Operations.GetOperation] or other methods to check whether the
-  /// cancellation succeeded or the operation completed despite cancellation.
+  /// `google.rpc.Code.UNIMPLEMENTED`.  Clients can use
+  /// [Operations.GetOperation][google.longrunning.Operations.GetOperation] or
+  /// other methods to check whether the cancellation succeeded or whether the
+  /// operation completed despite cancellation. On successful cancellation,
+  /// the operation is not deleted; instead, it becomes an operation with
+  /// an [Operation.error][google.longrunning.Operation.error] value with a [google.rpc.Status.code][google.rpc.Status.code] of 1,
+  /// corresponding to `Code.CANCELLED`.
   @Sendable func cancelOperation(
     request: Google_Longrunning_CancelOperationRequest,
     context: GRPCAsyncServerCallContext
   ) async throws -> SwiftProtobuf.Google_Protobuf_Empty
 
-  /// Deletes a long-running operation.  It indicates the client is no longer
-  /// interested in the operation result. It does not cancel the operation.
-  @Sendable func deleteOperation(
-    request: Google_Longrunning_DeleteOperationRequest,
+  /// Waits until the specified long-running operation is done or reaches at most
+  /// a specified timeout, returning the latest state.  If the operation is
+  /// already done, the latest state is immediately returned.  If the timeout
+  /// specified is greater than the default HTTP/RPC timeout, the HTTP/RPC
+  /// timeout is used.  If the server does not support this method, it returns
+  /// `google.rpc.Code.UNIMPLEMENTED`.
+  /// Note that this method is on a best-effort basis.  It may return the latest
+  /// state before the specified timeout (including immediately), meaning even an
+  /// immediate response is no guarantee that the operation is done.
+  @Sendable func waitOperation(
+    request: Google_Longrunning_WaitOperationRequest,
     context: GRPCAsyncServerCallContext
-  ) async throws -> SwiftProtobuf.Google_Protobuf_Empty
+  ) async throws -> Google_Longrunning_Operation
 }
 
 @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
@@ -595,6 +734,15 @@ extension Google_Longrunning_OperationsAsyncProvider {
     context: CallHandlerContext
   ) -> GRPCServerHandlerProtocol? {
     switch name {
+    case "ListOperations":
+      return GRPCAsyncServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<Google_Longrunning_ListOperationsRequest>(),
+        responseSerializer: ProtobufSerializer<Google_Longrunning_ListOperationsResponse>(),
+        interceptors: self.interceptors?.makeListOperationsInterceptors() ?? [],
+        wrapping: self.listOperations(request:context:)
+      )
+
     case "GetOperation":
       return GRPCAsyncServerHandler(
         context: context,
@@ -604,13 +752,13 @@ extension Google_Longrunning_OperationsAsyncProvider {
         wrapping: self.getOperation(request:context:)
       )
 
-    case "ListOperations":
+    case "DeleteOperation":
       return GRPCAsyncServerHandler(
         context: context,
-        requestDeserializer: ProtobufDeserializer<Google_Longrunning_ListOperationsRequest>(),
-        responseSerializer: ProtobufSerializer<Google_Longrunning_ListOperationsResponse>(),
-        interceptors: self.interceptors?.makeListOperationsInterceptors() ?? [],
-        wrapping: self.listOperations(request:context:)
+        requestDeserializer: ProtobufDeserializer<Google_Longrunning_DeleteOperationRequest>(),
+        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
+        interceptors: self.interceptors?.makeDeleteOperationInterceptors() ?? [],
+        wrapping: self.deleteOperation(request:context:)
       )
 
     case "CancelOperation":
@@ -622,13 +770,13 @@ extension Google_Longrunning_OperationsAsyncProvider {
         wrapping: self.cancelOperation(request:context:)
       )
 
-    case "DeleteOperation":
+    case "WaitOperation":
       return GRPCAsyncServerHandler(
         context: context,
-        requestDeserializer: ProtobufDeserializer<Google_Longrunning_DeleteOperationRequest>(),
-        responseSerializer: ProtobufSerializer<SwiftProtobuf.Google_Protobuf_Empty>(),
-        interceptors: self.interceptors?.makeDeleteOperationInterceptors() ?? [],
-        wrapping: self.deleteOperation(request:context:)
+        requestDeserializer: ProtobufDeserializer<Google_Longrunning_WaitOperationRequest>(),
+        responseSerializer: ProtobufSerializer<Google_Longrunning_Operation>(),
+        interceptors: self.interceptors?.makeWaitOperationInterceptors() ?? [],
+        wrapping: self.waitOperation(request:context:)
       )
 
     default:
@@ -641,21 +789,25 @@ extension Google_Longrunning_OperationsAsyncProvider {
 
 public protocol Google_Longrunning_OperationsServerInterceptorFactoryProtocol {
 
+  /// - Returns: Interceptors to use when handling 'listOperations'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeListOperationsInterceptors() -> [ServerInterceptor<Google_Longrunning_ListOperationsRequest, Google_Longrunning_ListOperationsResponse>]
+
   /// - Returns: Interceptors to use when handling 'getOperation'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetOperationInterceptors() -> [ServerInterceptor<Google_Longrunning_GetOperationRequest, Google_Longrunning_Operation>]
 
-  /// - Returns: Interceptors to use when handling 'listOperations'.
+  /// - Returns: Interceptors to use when handling 'deleteOperation'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makeListOperationsInterceptors() -> [ServerInterceptor<Google_Longrunning_ListOperationsRequest, Google_Longrunning_ListOperationsResponse>]
+  func makeDeleteOperationInterceptors() -> [ServerInterceptor<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>]
 
   /// - Returns: Interceptors to use when handling 'cancelOperation'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeCancelOperationInterceptors() -> [ServerInterceptor<Google_Longrunning_CancelOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>]
 
-  /// - Returns: Interceptors to use when handling 'deleteOperation'.
+  /// - Returns: Interceptors to use when handling 'waitOperation'.
   ///   Defaults to calling `self.makeInterceptors()`.
-  func makeDeleteOperationInterceptors() -> [ServerInterceptor<Google_Longrunning_DeleteOperationRequest, SwiftProtobuf.Google_Protobuf_Empty>]
+  func makeWaitOperationInterceptors() -> [ServerInterceptor<Google_Longrunning_WaitOperationRequest, Google_Longrunning_Operation>]
 }
 
 public enum Google_Longrunning_OperationsServerMetadata {
@@ -663,23 +815,30 @@ public enum Google_Longrunning_OperationsServerMetadata {
     name: "Operations",
     fullName: "google.longrunning.Operations",
     methods: [
-      Google_Longrunning_OperationsServerMetadata.Methods.getOperation,
       Google_Longrunning_OperationsServerMetadata.Methods.listOperations,
-      Google_Longrunning_OperationsServerMetadata.Methods.cancelOperation,
+      Google_Longrunning_OperationsServerMetadata.Methods.getOperation,
       Google_Longrunning_OperationsServerMetadata.Methods.deleteOperation,
+      Google_Longrunning_OperationsServerMetadata.Methods.cancelOperation,
+      Google_Longrunning_OperationsServerMetadata.Methods.waitOperation,
     ]
   )
 
   public enum Methods {
+    public static let listOperations = GRPCMethodDescriptor(
+      name: "ListOperations",
+      path: "/google.longrunning.Operations/ListOperations",
+      type: GRPCCallType.unary
+    )
+
     public static let getOperation = GRPCMethodDescriptor(
       name: "GetOperation",
       path: "/google.longrunning.Operations/GetOperation",
       type: GRPCCallType.unary
     )
 
-    public static let listOperations = GRPCMethodDescriptor(
-      name: "ListOperations",
-      path: "/google.longrunning.Operations/ListOperations",
+    public static let deleteOperation = GRPCMethodDescriptor(
+      name: "DeleteOperation",
+      path: "/google.longrunning.Operations/DeleteOperation",
       type: GRPCCallType.unary
     )
 
@@ -689,9 +848,9 @@ public enum Google_Longrunning_OperationsServerMetadata {
       type: GRPCCallType.unary
     )
 
-    public static let deleteOperation = GRPCMethodDescriptor(
-      name: "DeleteOperation",
-      path: "/google.longrunning.Operations/DeleteOperation",
+    public static let waitOperation = GRPCMethodDescriptor(
+      name: "WaitOperation",
+      path: "/google.longrunning.Operations/WaitOperation",
       type: GRPCCallType.unary
     )
   }
